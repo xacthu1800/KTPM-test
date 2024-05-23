@@ -6,7 +6,7 @@ const session = require('express-session');
 const { log } = require('console');
 const { ObjectId } = require('mongodb');
 const portfinder = require('portfinder');
-const {dataUser, dataProduct, delivery, record} = require('./src/config');
+const {dataUser, dataProduct, delivery, record} = require('./src/config.js');
 const port = process.env.PORT || 8000;
 let globalSearchResult = [];
 
@@ -14,7 +14,6 @@ const app = express()
 // conver data into JSON format
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
-//kiểm tra trạng thái người dungf (đã login chưa)
 //use ejs as the view enginne 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); 
@@ -449,7 +448,7 @@ app.get("/delivery",calculateTotalQuantity, async(req, res)=>{
  
 }); */
 
-app.use("/", async (req, res, next) => {
+app.use("/", calculateTotalQuantity, async (req, res, next) => {
     try {
         const product = await dataProduct.find().sort({ _id: -1 }).limit(12);
         res.render("index", { pros: product, userN: req.session.username, login: "login", logout: "logout" });
