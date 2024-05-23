@@ -31,7 +31,7 @@ app.use(session({
 app.use(calculateTotalQuantity);
 
 // user signup
-app.post("/signup",async (req,res)=>{
+/* app.post("/signup",async (req,res)=>{
     const data ={
         name :  req.body.username,
         password: req.body.password
@@ -365,7 +365,7 @@ app.get('/search', async (req, res) => {
         // Redirect đến trang /danhmuc
         res.redirect('/danhmuc');
 
-        /* res.redirect('/danhmuc?rand=' + Math.random())  */
+        // res.redirect('/danhmuc?rand=' + Math.random())  
          } catch (error) {
                 console.error(error);
                 res.status(500).json({ message: 'Internal server error' });
@@ -438,7 +438,7 @@ app.get("/delivery",calculateTotalQuantity, async(req, res)=>{
         carts: res.locals.carts,
         history: deli })
 })
-
+ */
 /* portfinder.getPort((err, port) => {
     if (err) {
         console.error('Không thể tìm PORT trống:', err);
@@ -448,6 +448,15 @@ app.get("/delivery",calculateTotalQuantity, async(req, res)=>{
     // Lắng nghe trên PORT đã tìm được
  
 }); */
+
+app.use("/", async (req, res, next) => {
+    try {
+        const product = await dataProduct.find().sort({ _id: -1 }).limit(12);
+        res.render("index", { pros: product, userN: req.session.username, login: "login", logout: "logout" });
+    } catch (error) {
+        next(error); // Chuyển lỗi tới middleware xử lý lỗi
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server running on :  localhost:${port}`);
