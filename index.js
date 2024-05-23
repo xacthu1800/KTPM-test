@@ -6,23 +6,14 @@ const session = require('express-session');
 const { log } = require('console');
 const { ObjectId } = require('mongodb');
 const portfinder = require('portfinder');
-
-
-
 const {dataUser, dataProduct, delivery, record} = require('./src/config');
-
-
-
 let globalSearchResult = [];
 
 const app = express()
 // conver data into JSON format
 app.use(express.json())
-
 app.use(express.urlencoded({extended: false}))
-
 //kiểm tra trạng thái người dungf (đã login chưa)
-
 //use ejs as the view enginne 
 app.set('view engine', 'ejs');
 // static file
@@ -270,14 +261,11 @@ app.post("/resetpage", async (req, res) => {
     res.sendStatus(200); 
 });
 
-
-
 app.post("/reset", async (req, res) => {
     y = []; 
     num = []; 
     res.redirect('/danhmuc');
 });
-
 
 let y = [];
 let num = [];
@@ -450,10 +438,6 @@ app.get("/delivery",calculateTotalQuantity, async(req, res)=>{
 })
 
 
-
-
-
-
 portfinder.getPort((err, port) => {
     if (err) {
         console.error('Không thể tìm PORT trống:', err);
@@ -465,18 +449,9 @@ portfinder.getPort((err, port) => {
         console.log(`Server running on :  localhost:${port}`);
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
 
 function calculateTotalQuantity(req, res, next) {
     let totalQuantity = 0;
