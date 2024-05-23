@@ -7,6 +7,7 @@ const { log } = require('console');
 const { ObjectId } = require('mongodb');
 const portfinder = require('portfinder');
 const {dataUser, dataProduct, delivery, record} = require('./src/config');
+const port = process.env.PORT || 8000;
 let globalSearchResult = [];
 
 const app = express()
@@ -437,18 +438,20 @@ app.get("/delivery",calculateTotalQuantity, async(req, res)=>{
         history: deli })
 })
 
-
-portfinder.getPort((err, port) => {
+/* portfinder.getPort((err, port) => {
     if (err) {
         console.error('Không thể tìm PORT trống:', err);
         return;
     }
     
     // Lắng nghe trên PORT đã tìm được
-    app.listen(port, () => {
-        console.log(`Server running on :  localhost:${port}`);
-    });
+ 
+}); */
+
+app.listen(port, () => {
+    console.log(`Server running on :  localhost:${port}`);
 });
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
