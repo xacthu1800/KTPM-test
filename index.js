@@ -4,8 +4,7 @@ const path = require('path')
 const bcrypt = require('bcrypt')
 const session = require('express-session');
 const { log } = require('console');
-const { ObjectId } = require('mongodb');
-const portfinder = require('portfinder');
+//const portfinder = require('portfinder');
 const {dataUser, dataProduct, delivery, record} = require('./src/config.js');
 const port = process.env.PORT || 8000;
 let globalSearchResult = [];
@@ -14,6 +13,7 @@ const app = express()
 // conver data into JSON format
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
+//kiểm tra trạng thái người dungf (đã login chưa)
 //use ejs as the view enginne 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views')); 
@@ -30,7 +30,7 @@ app.use(session({
 app.use(calculateTotalQuantity);
 
 // user signup
-/* app.post("/signup",async (req,res)=>{
+app.post("/signup",async (req,res)=>{
     const data ={
         name :  req.body.username,
         password: req.body.password
@@ -216,8 +216,9 @@ app.get('/checkSession', (req, res) => {
 });
 
 app.get("/", async (req, res) => {
-        const product = await dataProduct.find().sort({ _id: -1 }).limit(12);
-    res.render("index", { pros: product, userN: req.session.username, login: "login", logout: "logout" });
+    /*     const product = await dataProduct.find().sort({ _id: -1 }).limit(12);
+    res.render("index", { pros: product, userN: req.session.username, login: "login", logout: "logout" }); */
+    res.redirect('index')
 });
 
 app.get("/index", calculateTotalQuantity, async(req,res)=>{
@@ -364,7 +365,7 @@ app.get('/search', async (req, res) => {
         // Redirect đến trang /danhmuc
         res.redirect('/danhmuc');
 
-        // res.redirect('/danhmuc?rand=' + Math.random())  
+        /* res.redirect('/danhmuc?rand=' + Math.random())  */
          } catch (error) {
                 console.error(error);
                 res.status(500).json({ message: 'Internal server error' });
@@ -437,7 +438,7 @@ app.get("/delivery",calculateTotalQuantity, async(req, res)=>{
         carts: res.locals.carts,
         history: deli })
 })
- */
+
 /* portfinder.getPort((err, port) => {
     if (err) {
         console.error('Không thể tìm PORT trống:', err);
@@ -447,15 +448,6 @@ app.get("/delivery",calculateTotalQuantity, async(req, res)=>{
     // Lắng nghe trên PORT đã tìm được
  
 }); */
-
-app.use("/", calculateTotalQuantity, async (req, res, next) => {
-    try {
-        const product = await dataProduct.find().sort({ _id: -1 }).limit(12);
-        res.render("index", { pros: product, userN: req.session.username, login: "login", logout: "logout" });
-    } catch (error) {
-        next(error); // Chuyển lỗi tới middleware xử lý lỗi
-    }
-});
 
 app.listen(port, () => {
     console.log(`Server running on :  localhost:${port}`);
