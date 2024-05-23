@@ -17,6 +17,7 @@ app.use(express.urlencoded({extended: false}))
 //kiểm tra trạng thái người dungf (đã login chưa)
 //use ejs as the view enginne 
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); 
 // static file
 app.use(express.static('public'))
 
